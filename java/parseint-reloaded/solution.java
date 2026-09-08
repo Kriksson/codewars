@@ -38,46 +38,23 @@ public class Parser {
         );
         numStr = numStr.replace("-", " ");
         int current = 0;
-        boolean goNext = false;
         int result = 0;
         List<String> nums = List.of(numStr.trim().split(" "));
         for (String num : nums) {
-            if (numbers.get(num) != null && !(goNext)) {
+            if (numbers.get(num) != null) {
                 current += numbers.get(num);
             } else if (num.equals("hundred")) {
-                if (!(goNext)) {
-                    current *= 100;
-                } else {
-                    result *= 100;
-                }
+                current *= 100;
             } else if (num.equals("thousand")) {
                 current *= 1000;
-                goNext = true;
+                result = current;
+                current = 0;
             } else if (num.equals("million")) {
                 current *= 1000000;
-            } else if (numbers.get(num) != null && goNext) {
+            } else if (numbers.get(num) != null) {
                 result += numbers.get(num);
             }
         }
         return current+result;
     }
 }
-
-/*
-seven hundred eighty-three thousand nine hundred and nineteen
-Сначала идёт число затем РАЗРЯД, затем число, потом разряд
-Объявляем sum
-Ищем число от 1 до 99
-Нашли
-seven, далее идёт hundred - умножаем 7 на 100 = 700
-Далее eighty-three - суммируем
-700 + 83, далее идёт thousand, умножаем 783 на 1000
-783000
-далее nine, затем hundred - умножаем 9*100 = 900
-783900
-далее nineteen, суммируем
-783919
-
-Логично что мы объединяем числа слева от тысячи, умножаем на тысячу, далее сумируем правую часть к уже готовой тысяче
-
- */
